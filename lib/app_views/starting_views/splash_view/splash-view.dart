@@ -1,11 +1,40 @@
+import 'package:doit/app_views/auth_views/sign_in_view/sign-in-view.dart';
+import 'package:doit/app_views/home_view/home-view.dart';
 import 'package:doit/assets/app_icons/app-icons.dart';
 import 'package:doit/components/app-colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SplashView extends StatelessWidget {
+class SplashView extends StatefulWidget {
   const SplashView({super.key});
 
+  @override
+  State<SplashView> createState() => _SplashViewState();
+}
+
+class _SplashViewState extends State<SplashView> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration(seconds: 1),(){
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>SignInView()));
+      islogin();
+    });
+  }
+  islogin()async
+  {
+    User user=await FirebaseAuth.instance.currentUser!;
+    if(user==null)
+      {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>SignInView()));
+      }
+    else
+      {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeView()));
+      }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

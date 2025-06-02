@@ -1,6 +1,4 @@
-import 'package:doit/app_views/auth_views/sign_up_view/sign-up-view.dart';
-import 'package:doit/app_views/home_view/home-view.dart';
-import 'package:doit/app_views/starting_views/splash_view/splash-view.dart';
+import 'package:doit/app_views/auth_views/sign_in_view/sign-in-view.dart';
 import 'package:doit/assets/app_icons/app-icons.dart';
 import 'package:doit/assets/app_images/app-images.dart';
 import 'package:doit/components/app-colors.dart';
@@ -10,17 +8,17 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SignInView extends StatefulWidget {
-  const SignInView({super.key});
+class SignUpView extends StatefulWidget {
+  const SignUpView({super.key});
 
   @override
-  State<SignInView> createState() => _SignInViewState();
+  State<SignUpView> createState() => _SignUpViewState();
 }
 
-class _SignInViewState extends State<SignInView> {
+class _SignUpViewState extends State<SignUpView> {
   bool isloading = false;
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+TextEditingController emailController = TextEditingController();
+TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +76,7 @@ class _SignInViewState extends State<SignInView> {
                     ],
                   ),
                   Text(
-                    "Have an other productive day ! ",
+                    "create an account and join us now",
                     style: GoogleFonts.poppins(
                         color: AppColors.white1,
                         fontSize: 18,
@@ -92,7 +90,6 @@ class _SignInViewState extends State<SignInView> {
                       color: AppColors.white1,
                     ),
                     child: TextField(
-                      controller: emailController,
                       style: GoogleFonts.poppins(
                           color: AppColors.black1,
                           fontSize: 18,
@@ -100,11 +97,11 @@ class _SignInViewState extends State<SignInView> {
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           icon: Icon(
-                            Icons.email,
+                            Icons.person,
                             size: 30,
                           ),
                           iconColor: AppColors.black1,
-                          hintText: 'E-mail',
+                          hintText: 'Full Name',
                           hintStyle: GoogleFonts.poppins(
                               color: AppColors.grey1,
                               fontSize: 18,
@@ -113,6 +110,31 @@ class _SignInViewState extends State<SignInView> {
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 20),
+                    height: 42,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.white1,
+                    ),
+                    child: TextFormField(
+                      controller: emailController,
+                      style: GoogleFonts.poppins(
+                          color: AppColors.black1,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        icon: Icon(Icons.email),
+                        iconColor: AppColors.black1,
+                        hintText: 'E-mail',
+                        hintStyle: GoogleFonts.poppins(
+                            color: AppColors.grey1,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20,vertical: 40),
                     height: 42,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -136,73 +158,50 @@ class _SignInViewState extends State<SignInView> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
+                  isloading?CircularProgressIndicator():
+                  InkWell(
+                    onTap: () async {
+                      isloading = true;
+                      setState(() {});
+                      await FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                          email: emailController.text.trim(),
+                          password: passwordController.text)
+                          .then((onValue) {
+                        isloading = false;
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SignInView()));
+                        setState(() {});
+                      }).onError((handleError, error) {
+                        isloading = false;
+                        setState(() {});
+                        Get.snackbar('Error', handleError.toString());
+                      });
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 25),
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: AppColors.blue3,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Center(
                         child: Text(
-                          "forget password?",
+                          "sign in",
                           style: GoogleFonts.poppins(
                               color: AppColors.white1,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              decoration: TextDecoration.underline,
-                              decorationColor: AppColors.white1,
-                              decorationThickness: 2),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
                         ),
-                        onPressed: () {},
                       ),
                     ),
                   ),
-                  isloading
-                      ? CircularProgressIndicator()
-                      : InkWell(
-                          onTap: () async {
-                            isloading = true;
-                            setState(() {});
-                            await FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                                    email: emailController.text.trim(),
-                                    password: passwordController.text)
-                                .then((onValue) {
-                              isloading = false;
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HomeView()));
-                              setState(() {});
-                            }).onError((handleError, error) {
-                              isloading = false;
-                              setState(() {});
-                              Get.snackbar('Error', handleError.toString());
-                            });
-                          },
-                          child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 25),
-                            height: 42,
-                            decoration: BoxDecoration(
-                              color: AppColors.blue3,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "sign In",
-                                style: GoogleFonts.poppins(
-                                    color: AppColors.white1,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                          ),
-                        ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Don't have an account?",
+                          "Already have an account",
                           style: GoogleFonts.poppins(
                               color: AppColors.white1,
                               fontSize: 14,
@@ -210,17 +209,14 @@ class _SignInViewState extends State<SignInView> {
                         ),
                         TextButton(
                           child: Text(
-                            "Sign up",
+                            "sign in",
                             style: GoogleFonts.poppins(
                                 color: AppColors.blue4,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500),
                           ),
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SignUpView()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>SignInView()));
                           },
                         ),
                       ],
@@ -231,7 +227,7 @@ class _SignInViewState extends State<SignInView> {
                     child: Row(
                       children: [
                         Text(
-                          "Sign In With:",
+                          "Sign Up With:",
                           style: GoogleFonts.poppins(
                             color: AppColors.white1,
                             fontSize: 14,

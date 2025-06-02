@@ -1,4 +1,5 @@
-import 'package:doit/app_views/auth_views/sign_view/sign-in-view.dart';
+import 'package:doit/app_views/auth_views/sign_up_view/sign-up-view.dart';
+import 'package:doit/app_views/auth_views/sign_view/sign-up-view.dart';
 import 'package:doit/app_views/starting_views/splash_view/splash-view.dart';
 import 'package:doit/starting_views/splash_view/splash-view.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SignInView()
+      home: SplashView()
     );
   }
 }
