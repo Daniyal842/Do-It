@@ -1,3 +1,4 @@
+import 'package:doit/assets/app_icons/app-icons.dart';
 import 'package:doit/components/app-colors.dart';
 import 'package:flutter/material.dart';
 
@@ -25,9 +26,12 @@ class _HomeViewState extends State<HomeView> {
                     AppColors.blue1,
                     AppColors.blue2
                   ]
-                )
+                ),
               ),
             ),
+          ),
+          ImageIcon(
+            AssetImage(AppIcons.checkmark)
           )
         ],
       ),

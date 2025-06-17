@@ -2,6 +2,7 @@ import 'package:doit/app_views/auth_views/sign_in_view/sign-in-view.dart';
 import 'package:doit/app_views/home_view/home-view.dart';
 import 'package:doit/assets/app_icons/app-icons.dart';
 import 'package:doit/components/app-colors.dart';
+import 'package:doit/starting_views/onbording_views/onbording-view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,7 +20,7 @@ class _SplashViewState extends State<SplashView> {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration(seconds: 1),(){
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>SignInView()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>OnbordingView()));
       islogin();
     });
   }

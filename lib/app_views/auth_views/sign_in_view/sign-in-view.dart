@@ -19,6 +19,7 @@ class SignInView extends StatefulWidget {
 
 class _SignInViewState extends State<SignInView> {
   bool isloading = false;
+  bool isHide=true;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   @override
@@ -119,6 +120,7 @@ class _SignInViewState extends State<SignInView> {
                       color: AppColors.white1,
                     ),
                     child: TextFormField(
+                      obscureText: isHide,
                       controller: passwordController,
                       style: GoogleFonts.poppins(
                           color: AppColors.black1,
@@ -133,6 +135,22 @@ class _SignInViewState extends State<SignInView> {
                             color: AppColors.grey1,
                             fontSize: 18,
                             fontWeight: FontWeight.w400),
+                        suffixIcon: IconButton(
+                          icon: isHide? Icon(Icons.remove_red_eye_outlined,):ImageIcon(AssetImage(AppIcons.close_eye),size: 24,),
+                          onPressed: (){
+                            if(isHide==true)
+                              {
+                                isHide=false;
+                              }
+                            else
+                              {
+                                isHide=true;
+                              }
+                            setState(() {
+                              
+                            });
+                          },
+                        )
                       ),
                     ),
                   ),
