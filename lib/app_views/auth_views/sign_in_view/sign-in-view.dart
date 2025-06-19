@@ -19,7 +19,7 @@ class SignInView extends StatefulWidget {
 
 class _SignInViewState extends State<SignInView> {
   bool isloading = false;
-  bool isHide=true;
+  bool isHide = true;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   @override
@@ -127,31 +127,33 @@ class _SignInViewState extends State<SignInView> {
                           fontSize: 18,
                           fontWeight: FontWeight.w400),
                       decoration: InputDecoration(
-                        border: InputBorder.none,
-                        icon: Icon(Icons.lock),
-                        iconColor: AppColors.black1,
-                        hintText: 'Password',
-                        hintStyle: GoogleFonts.poppins(
-                            color: AppColors.grey1,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400),
-                        suffixIcon: IconButton(
-                          icon: isHide? Icon(Icons.remove_red_eye_outlined,):ImageIcon(AssetImage(AppIcons.close_eye),size: 24,),
-                          onPressed: (){
-                            if(isHide==true)
-                              {
-                                isHide=false;
+                          border: InputBorder.none,
+                          icon: Icon(Icons.lock),
+                          iconColor: AppColors.black1,
+                          hintText: 'Password',
+                          hintStyle: GoogleFonts.poppins(
+                              color: AppColors.grey1,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400),
+                          suffixIconColor: AppColors.blue3,
+                          suffixIcon: IconButton(
+                            icon: isHide
+                                ? ImageIcon(
+                                    AssetImage(AppIcons.close_eye),
+                                    size: 24,
+                                  )
+                                : Icon(
+                                    Icons.remove_red_eye_outlined,
+                                  ),
+                            onPressed: () {
+                              if (isHide == true) {
+                                isHide = false;
+                              } else {
+                                isHide = true;
                               }
-                            else
-                              {
-                                isHide=true;
-                              }
-                            setState(() {
-                              
-                            });
-                          },
-                        )
-                      ),
+                              setState(() {});
+                            },
+                          )),
                     ),
                   ),
                   Padding(

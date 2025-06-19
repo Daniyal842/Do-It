@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doit/assets/app_icons/app-icons.dart';
 import 'package:doit/components/app-colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -19,20 +21,13 @@ class _HomeViewState extends State<HomeView> {
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [0.1,0.9],
-                  colors: [
-                    AppColors.blue1,
-                    AppColors.blue2
-                  ]
-                ),
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [0.1, 0.9],
+                    colors: [AppColors.blue1, AppColors.blue2]),
               ),
             ),
           ),
-          ImageIcon(
-            AssetImage(AppIcons.checkmark)
-          )
         ],
       ),
     );

@@ -1,6 +1,8 @@
 import 'package:doit/app_views/auth_views/sign_in_view/sign-in-view.dart';
 import 'package:doit/app_views/home_view/home-view.dart';
 import 'package:doit/app_views/starting_views/splash_view/splash-view.dart';
+import 'package:doit/fetch-data.dart';
+import 'package:doit/insert-data.dart';
 import 'package:doit/starting_views/onbording_views/onbording-view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeView()
+      home: InsertDataView()
     );
   }
 }
