@@ -4,6 +4,7 @@ import 'package:doit/app_views/starting_views/splash_view/splash-view.dart';
 import 'package:doit/fetch-data.dart';
 import 'package:doit/insert-data.dart';
 import 'package:doit/starting_views/onbording_views/onbording-view.dart';
+import 'package:doit/update-data.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart' show Firebase;

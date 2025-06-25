@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doit/assets/app_icons/app-icons.dart';
 import 'package:doit/components/app-colors.dart';
+import 'package:doit/fetch-data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -89,13 +91,20 @@ class _InsertDataViewState extends State<InsertDataView> {
                   try {
                     isloading = true;
                     setState(() {});
+                    print("-------------1:${titleController.text}");
+                    print("-------------2:${descriptionController.text}");
+                    String docId=DateTime.now().microsecondsSinceEpoch.toString();
                     await FirebaseFirestore.instance
-                        .collection('insert')
-                        .add({
+                        .collection(FirebaseAuth.instance.currentUser!.uid).doc(docId)
+                        .set({
                       'title': titleController.text,
-                      'description': descriptionController.text
+                      'description': descriptionController.text,
+                      'docId':docId
                     });
                     isloading = false;
+                    titleController.clear();
+                    descriptionController.clear();
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>FetchDataView()));
                     setState(() {});
                   }
                   catch (error)
@@ -106,7 +115,6 @@ class _InsertDataViewState extends State<InsertDataView> {
                     });
                     print('Error:-${error.toString()}');
                   }
-
 
 
                   // isloading= true;
