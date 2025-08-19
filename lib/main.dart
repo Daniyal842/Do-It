@@ -1,9 +1,11 @@
 import 'package:doit/app_views/auth_views/sign_in_view/sign-in-view.dart';
-import 'package:doit/app_views/auth_views/sign_up_view/singup_2_screen.dart';
+import 'package:doit/app_views/auth_views/sign_up_view/signup_2_screen.dart';
 import 'package:doit/app_views/home_view/home-view.dart';
+import 'package:doit/app_views/profile_view/profile_view.dart';
 import 'package:doit/app_views/starting_views/splash_view/splash-view.dart';
 import 'package:doit/fetch-data.dart';
 import 'package:doit/insert-data.dart';
+import 'package:doit/routes/routes.dart';
 import 'package:doit/starting_views/onbording_views/onbording-view.dart';
 import 'package:doit/update-data.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,7 +28,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SingupScreen()
+      // initialBinding: 'splash_screen',
+      // routes: AppRoutes.routes,
+      home: SignupScreen(),
+      //SingupScreen()
     );
   }
 }
