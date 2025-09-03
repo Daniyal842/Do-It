@@ -1,10 +1,14 @@
+
 import 'package:doit/app_views/auth_views/sign_in_view/sign-in-view.dart';
 import 'package:doit/app_views/home_view/home-view.dart';
-import 'package:doit/assets/app_icons/app-icons.dart';
-import 'package:doit/components/app-colors.dart';
-import 'package:doit/starting_views/onbording_views/onbording-view.dart';
+import 'package:doit/common/constants/app-colors.dart';
+import 'package:doit/common/constants/app-icons.dart';
+import 'package:doit/common/widgets/app_text.dart';
+import 'package:doit/common/widgets/gradient_background.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SplashView extends StatefulWidget {
@@ -20,7 +24,7 @@ class _SplashViewState extends State<SplashView> {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration(seconds: 1),(){
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>OnbordingView()));
+      Get.toNamed('/OnboardingView');
       islogin();
     });
   }
@@ -29,66 +33,45 @@ class _SplashViewState extends State<SplashView> {
     User user=await FirebaseAuth.instance.currentUser!;
     if(user==null)
       {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>SignInView()));
+        Get.offNamed('/SignInView');
+       // Navigator.push(context, MaterialPageRoute(builder: (context)=>SignInView()));
       }
     else
       {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeView()));
+       // Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeView()));
+        Get.offNamed('/BottomBar');
       }
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox.expand(
-        child: Stack(
+      body: GradientBackground(
+        child:  Column(
           children: [
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      stops: [0.1,0.9],
-                      colors: [
-                        // Color(0xff1253AA),
-                        // Color(0xff05243E)
-                        AppColors.blue1,
-                        AppColors.blue2,
-                      ]
-                  ),
-                ),
-              ),
+            SizedBox(
+              height: 150,
             ),
-            Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 150,
-                  ),
-                  ImageIcon(
-                    AssetImage(AppIcons.checkmark),
-                    size: 100,
-                    color: AppColors.white1,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text("Do It",style: GoogleFonts.darumadropOne(
-                    color: AppColors.white1,
-                    fontSize: 36,
-                    fontWeight: FontWeight.w400
-                  ),),
-                  SizedBox(
-                    height: 120,
-                  ),
-                  Text("v 1.0.0",style: GoogleFonts.poppins(
-                    color: AppColors.white1,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500
-                  ),)
-                ],
-              ),
-            )
+            ImageIcon(
+              AssetImage(AppIcons.checkmark),
+              size: 100,
+              color: AppColors.white1,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text("Do It",style: GoogleFonts.darumadropOne(
+                color: AppColors.white1,
+                fontSize: 36,
+                fontWeight: FontWeight.w400
+            ),),
+            SizedBox(
+              height: 120,
+            ),
+            Text("v 1.0.0",style: GoogleFonts.poppins(
+                color: AppColors.white1,
+                fontSize: 20,
+                fontWeight: FontWeight.w500
+            ),)
           ],
         ),
       ),

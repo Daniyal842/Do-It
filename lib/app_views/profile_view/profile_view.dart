@@ -1,4 +1,4 @@
-import 'package:doit/app_views/profile_view/profile_controller.dart';
+import 'package:doit/app_views/home_view/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
