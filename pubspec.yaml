@@ -39,6 +39,7 @@ dependencies:
   firebase_auth:
   get:
   cloud_firestore: ^6.0.0
+  fancy_bottom_navigation: ^0.3.3
 
 dev_dependencies:
   flutter_test:

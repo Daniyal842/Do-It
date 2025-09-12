@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/OnboardingView', page: ()=>OnboardingView()),
         GetPage(name: '/SignInView', page: ()=>SignInView()),
         GetPage(name: '/SignUpView', page: ()=>SignUpView()),
-        GetPage(name: '/BottomBar', page: ()=>BottomBar()),
+        GetPage(name: '/BottomBar', page: ()=>BottomBarExample()),
         GetPage(name: '/HomeView', page: ()=>HomeView()),
         GetPage(name: '/TaskPage', page: ()=>TaskPage()),
         GetPage(name: '/TimeView', page: ()=>TimeView()),

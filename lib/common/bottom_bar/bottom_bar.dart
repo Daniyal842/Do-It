@@ -1,34 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:doit/app_views/home_view/home-view.dart';
-import 'package:doit/app_views/setting_view/setting_view.dart';
-import 'package:doit/app_views/task_view/task_view.dart';
-import 'package:doit/app_views/time_view/time_view.dart';
-import 'package:doit/common/constants/app-colors.dart';
-import 'package:doit/common/constants/app-icons.dart';
-import 'bottom_bar_controller.dart';  // apna controller import karo
+import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 
-class BottomBar extends StatelessWidget {
-  BottomBar({super.key});
+class BottomBarExample extends StatefulWidget {
+  const BottomBarExample({super.key});
 
-  final BottomBarController bottomBarController = Get.put(BottomBarController());
+  @override
+  State<BottomBarExample> createState() => _BottomBarExampleState();
+}
 
-  final List pages = [
-    HomeView(),
-    TaskPage(),
-    TimeView(),
-    SettingView(),
+class _BottomBarExampleState extends State<BottomBarExample> {
+  int _currentPage = 0;
+
+  final List<Widget> _pages = [
+    const Center(child: Text("Home Page", style: TextStyle(fontSize: 22))),
+    const Center(child: Text("Search Page", style: TextStyle(fontSize: 22))),
+    const Center(child: Text("Profile Page", style: TextStyle(fontSize: 22))),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: pages.elementAt(bottomBarController.selectedIndex),
-          )
+      body: _pages[_currentPage],
+      bottomNavigationBar: FancyBottomNavigation(
+        tabs: [
+          TabData(iconData: Icons.home, title: "Home"),
+          TabData(iconData: Icons.search, title: "Search"),
+          TabData(iconData: Icons.person, title: "Profile"),
         ],
+        onTabChangedListener: (position) {
+          setState(() {
+            _currentPage = position;
+          });
+        },
       ),
     );
   }

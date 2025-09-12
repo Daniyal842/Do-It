@@ -5,7 +5,7 @@ class BottomBarController extends GetxController {
   var selectedIndex = 0.obs;
 
   // change tab
-  void changePage(int index) {
+  changePage(int index) {
     selectedIndex.value = index;
   }
 }
