@@ -4,6 +4,7 @@ import 'package:doit/app_views/home_view/home-view.dart';
 import 'package:doit/app_views/setting_view/setting_view.dart';
 import 'package:doit/app_views/starting_views/onboarding_view/onboarding_view.dart';
 import 'package:doit/app_views/starting_views/splash_view/splash-view.dart';
+import 'package:doit/app_views/task_view/detail_view.dart';
 import 'package:doit/app_views/task_view/task_view.dart';
 import 'package:doit/app_views/time_view/time_view.dart';
 import 'package:doit/common/bottom_bar/bottom_bar.dart';
@@ -28,12 +29,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black,),
-        useMaterial3: true,
-      ),
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       getPages: [
@@ -46,6 +41,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/TaskPage', page: ()=>TaskPage()),
         GetPage(name: '/TimeView', page: ()=>TimeView()),
         GetPage(name: '/SettingView', page: ()=>SettingView()),
+        GetPage(name: '/taskDetailView', page: ()=>Detailpage()),
       ],
     );
   }

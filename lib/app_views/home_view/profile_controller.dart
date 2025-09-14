@@ -9,10 +9,15 @@ class ProfileController extends GetxController {
 
   insertUserData() async {
     try {
-      await FirebaseFirestore.instance.collection('UserData').add({
+      // await FirebaseFirestore.instance.collection('userData').add({
+      //   'userId':userId.value,
+      //   'username':username.value,
+      //   'userEmail':useremail.value
+      // }
+      await FirebaseFirestore.instance.collection('userData').doc(userId.value).set({
         'userId':userId.value,
         'username':username.value,
-        'userEmail':useremail.value
+        'userEmail':useremail.value,
       });
     }
     catch (e) {
