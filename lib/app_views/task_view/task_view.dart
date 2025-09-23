@@ -77,10 +77,10 @@ class _TaskPageState extends State<TaskPage> {
                         maxLines: 6,
                       ),
                       Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(
-                              width: 100,
+                              width: 120,
                               child: TextFormField(
                                 cursorColor: AppColors.blue4,
                                 controller: tasklistController.dateController,
@@ -115,7 +115,7 @@ class _TaskPageState extends State<TaskPage> {
                                 ),
                               )),
                           Container(
-                            width: 100,
+                            width: 120,
                             child: TextFormField(
                               cursorColor: AppColors.blue4,
                               controller: tasklistController.timeController,
@@ -152,15 +152,17 @@ class _TaskPageState extends State<TaskPage> {
                         ],
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ContainerButton(
-                            onTap: () {},
+                            onTap: () {
+                              tasklistController.cancelTask();
+                            },
                             text: "Cancel",
                             bgColor: AppColors.grey1,
                             textColor: AppColors.black1,
                             height: 45,
-                            width: 100,
+                            width: 120,
                           ),
                           Obx(
                             () => tasklistController.isLoading.value
@@ -173,7 +175,7 @@ class _TaskPageState extends State<TaskPage> {
                                     bgColor: AppColors.blue3,
                                     textColor: AppColors.white1,
                                     height: 45,
-                                    width: 100,
+                                    width: 120,
                                   ),
                           )
                         ],
@@ -265,47 +267,6 @@ class _TaskPageState extends State<TaskPage> {
             SizedBox(
               height: 30,
             ),
-            // Card(
-            //   color: AppColors.white1,
-            //   shadowColor: AppColors.grey2,
-            //   child: ListTile(
-            //     title: Row(
-            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //       children: [
-            //         AppText(
-            //           text: "Task",
-            //           color: AppColors.black1,
-            //         ),
-            //         AppText(text: "Pennding",
-            //           color: Colors.red,//if Compledet then green
-            //            fontSize: 15,
-            //         ),
-            //       ],
-            //     ),
-            //     subtitle: Row(
-            //       children: [
-            //         AppText(
-            //           text: "Date|",
-            //           color: AppColors.black1,
-            //           fontWeight: FontWeight.w400,
-            //           fontSize: 12,
-            //         ),
-            //         AppText(
-            //           text: "Time",
-            //           color: AppColors.black1,
-            //           fontWeight: FontWeight.w400,
-            //           fontSize: 12,
-            //         ),
-            //       ],
-            //     ),
-            //     trailing: IconButton(
-            //       icon: Icon(Icons.arrow_forward_ios_rounded),
-            //       iconSize: 30,
-            //       color: AppColors.blue4,
-            //       onPressed: (){},
-            //     ),
-            //   ),
-            // )
 
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
@@ -325,9 +286,12 @@ class _TaskPageState extends State<TaskPage> {
                   // filter karne ke liye Obx
                   return Obx(() {
                     if (tasklistController.selectedIndex.value == 1) {
-                      tasks = tasks.where((t) => t['status'] == 'pending').toList();
+                      tasks =
+                          tasks.where((t) => t['status'] == 'pending').toList();
                     } else if (tasklistController.selectedIndex.value == 2) {
-                      tasks = tasks.where((t) => t['status'] == 'completed').toList();
+                      tasks = tasks
+                          .where((t) => t['status'] == 'completed')
+                          .toList();
                     }
 
                     if (tasks.isEmpty) {
@@ -340,14 +304,23 @@ class _TaskPageState extends State<TaskPage> {
                         var task = tasks[index];
                         return Card(
                           color: AppColors.white1,
-                          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 6),
                           child: ListTile(
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                AppText(
-                                  text: task['task'],
-                                  color: AppColors.black1,
+                                Expanded(
+                                  child: AppText(
+                                    text: task['task'],
+                                    color: AppColors.black1,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    //is jega per text 1 line per pora nahi ata
+                                    maxLines: 1,
+                                    overflow:
+                                        TextOverflow.ellipsis, // ... ajayega
+                                  ),
                                 ),
                                 AppText(
                                   text: task['status'] == 'pending'
@@ -380,8 +353,9 @@ class _TaskPageState extends State<TaskPage> {
                               icon: Icon(Icons.arrow_forward_ios_rounded),
                               iconSize: 30,
                               color: Colors.green,
-                              onPressed: (){
-                                tasklistController.nav_to_detail();
+                              onPressed: () {
+                                tasklistController.nav_to_detail(
+                                    task.data() as Map<String, dynamic>);
                               },
                             ),
                           ),
@@ -392,7 +366,6 @@ class _TaskPageState extends State<TaskPage> {
                 },
               ),
             ),
-
           ],
         ),
       ),

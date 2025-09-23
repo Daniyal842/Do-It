@@ -32,7 +32,7 @@ class ProfileController extends GetxController {
     try {
       print('------------fetch user data function calling');
       final data = await FirebaseFirestore.instance
-          .collection('UserData')
+          .collection('userData')
           .where('userId', isEqualTo: userId.value) // 👈 safer than using .doc(userId)
           .get();
 print('--------$data');

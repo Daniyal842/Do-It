@@ -8,8 +8,8 @@ class AppText extends StatelessWidget {
   final FontWeight fontWeight;
   final Color? color;
   final TextAlign? align;
-  final int? maxLines;
-  final TextOverflow? overflow;
+  final int maxLines; // ab required nahi, default set karenge
+  final TextOverflow overflow; // default set karenge
   final String fontFamily;
 
   const AppText({
@@ -19,8 +19,8 @@ class AppText extends StatelessWidget {
     this.fontWeight = FontWeight.w600,
     this.color,
     this.align,
-    this.maxLines,
-    this.overflow,
+    this.maxLines = 1, // default: ek line
+    this.overflow = TextOverflow.ellipsis, // default: ...
     this.fontFamily = 'Poppins',
   });
 
@@ -33,9 +33,9 @@ class AppText extends StatelessWidget {
       overflow: overflow,
       style: GoogleFonts.getFont(
         fontFamily,
-        fontSize: fontSize??24,
+        fontSize: fontSize ?? 24,
         fontWeight: fontWeight,
-        color: color??AppColors.white1,
+        color: color ?? AppColors.white1,
       ),
     );
   }

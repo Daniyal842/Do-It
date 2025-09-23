@@ -159,22 +159,12 @@ class _OnboardingTextState extends State<OnboardingText>
               child: AppText(
                 text: widget.title,
                 color: AppColors.white1,
+                maxLines: 50,
                 fontWeight: FontWeight.w600,
               ),
             ),
           ),
-          // const SizedBox(height: 15),
-          // SlideTransition(
-          //   position: _slideAnimation,
-          //   child: FadeTransition(
-          //     opacity: _fadeAnimation,
-          //     child: AppText(
-          //       text: widget.subtitle,
-          //       color: AppColors.grey1,
-          //       fontSize: 14,
-          //     ),
-          //   ),
-          // ),
+
         ],
       ),
     );

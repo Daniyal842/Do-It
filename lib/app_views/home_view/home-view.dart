@@ -19,14 +19,15 @@ class HomeView extends StatelessWidget {
       body: GradientBackground(
         child: Column(
           children: [
-
             Obx(
-            ()=> Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                color: AppColors.transparentBlue,
-                child: ListTile(
+              () => Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 30, horizontal: 8),
+                child: Card(
+                  color: AppColors.transparentBlue,
+                  child: ListTile(
                     leading: CircleAvatar(
+                      radius: 30,backgroundColor: AppColors.blue3,
                       child: Center(
                         child: Icon(Icons.person),
                       ),
@@ -34,13 +35,15 @@ class HomeView extends StatelessWidget {
                     title: AppText(
                       text: profileController.username.toString(),
                     ),
-                  subtitle: AppText(
-                    text: profileController.useremail.toString(),
-                    fontSize: 18,
+                    subtitle: AppText(
+                      text: profileController.useremail.toString(),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white70,
+                    ),
                   ),
-                  ),
+                ),
               ),
-            ),
             ),
           ],
         ),

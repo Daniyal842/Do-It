@@ -1,6 +1,5 @@
-import 'package:doit/app_views/auth_views/sign_in_view/sign-in-view.dart';
+
 import 'package:doit/app_views/home_view/profile_controller.dart';
-import 'package:doit/app_views/profile_view/profile_view.dart';
 import 'package:doit/common/widgets/show-message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -29,16 +28,19 @@ class AuthController extends GetxController {
       await profileController.insertUserData();
       print('----------data inserted successfully');
       ShowMessage.successMessage('Success', 'Register successfully');
+
       isLoading.value = false;
       //Get.toNamed(page)
+      Get.offNamed("/SignInView");
       nameController.clear();
       emailController.clear();
       passwordController.clear();
-      Get.toNamed("/SignInview");
+
     } catch (error) {
       isLoading.value = false;
       ShowMessage.errorMessage('Error', error.toString());
     }
+
   }
 
   login() async {

@@ -28,8 +28,15 @@ class TasklistController extends GetxController {
 
   var isLoading = false.obs;
 
-  nav_to_detail(){
-    Get.toNamed('/taskDetailView');
+  nav_to_detail(Map<String, dynamic> task) {
+    Get.toNamed('/taskDetailView', arguments: task);
+  }
+
+  // nav_to_detail(){
+  //   Get.toNamed('/taskDetailView');
+  // }
+  nav_to_task(){
+    Get.toNamed('/BottomBar');
   }
   // 🔹 Date Picker
   Future<void> pickDate(BuildContext context) async {
@@ -87,9 +94,10 @@ class TasklistController extends GetxController {
     );
 
     if (pickedTime != null) {
-      timeController.text =
-      "${pickedTime.hour}:${pickedTime.minute.toString().padLeft(2, '0')}";
+      final formattedTime = pickedTime.format(context); // 👈 ye AM/PM ke sath show karega
+      timeController.text = formattedTime;
     }
+
   }
 
   // 🔹 Create Task
@@ -142,12 +150,69 @@ class TasklistController extends GetxController {
 
       Get.back();
       Get.snackbar("Success", "Task Created Successfully",
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.green,
           colorText: Colors.white);
     } catch (e) {
       Get.snackbar("Error", "Failed to create task: $e",
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+  void cancelTask() {
+      Get.back();
+  }
+
+// 🔹 Update Task
+  Future<void> updateTask(String docId) async {
+    String task = taskController.text.trim();
+    String description = descriptionController.text.trim();
+    String date = dateController.text.trim();
+    String time = timeController.text.trim();
+
+    if (task.isEmpty || description.isEmpty || date.isEmpty || time.isEmpty) {
+      Get.snackbar(
+        "Error",
+        "Please fill all fields before updating task",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    try {
+      isLoading.value = true;
+
+      await FirebaseFirestore.instance
+          .collection('userData')
+          .doc(profileController.userId.value)
+          .collection('tasks')
+          .doc(docId) // ✅ pass the existing docId
+          .update({
+        'task': task,
+        'description': description,
+        'date': date,
+        'time': time,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+
+      taskController.clear();
+      descriptionController.clear();
+      dateController.clear();
+      timeController.clear();
+
+      Get.back();
+      Get.snackbar("Success", "Task Updated Successfully",
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.green,
+          colorText: Colors.white);
+    } catch (e) {
+      Get.snackbar("Error", "Failed to update task: $e",
+          snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.red,
           colorText: Colors.white);
     } finally {
@@ -155,21 +220,39 @@ class TasklistController extends GetxController {
     }
   }
 
-  // 🔹 Update Task Status
-  Future<void> updateTaskStatus(String docId, String newStatus) async {
+//  🔹 Delet Task
+  Future<void> deleteTask(String docId) async {
     try {
+      isLoading.value = true;
+
       await FirebaseFirestore.instance
           .collection('userData')
-          .doc(profileController.userId.value) // ✅ ProfileController ka UID
+          .doc(profileController.userId.value)
           .collection('tasks')
           .doc(docId)
-          .update({'status': newStatus});
+          .delete();
 
-      Get.snackbar("Updated", "Task status changed to $newStatus",
-          snackPosition: SnackPosition.BOTTOM);
+      Get.back(); // close detail page or sheet
+      Get.toNamed('BottomBar');
+      Get.snackbar(
+        "Deleted",
+        "Task deleted successfully",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     } catch (e) {
-      Get.snackbar("Error", e.toString(),
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+      Get.snackbar(
+        "Error",
+        "Failed to delete task: $e",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
     }
   }
+
+
 }
