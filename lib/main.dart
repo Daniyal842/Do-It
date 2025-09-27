@@ -1,3 +1,4 @@
+import 'package:doit/app_views/Calendar_view/Calendar_view.dart';
 import 'package:doit/app_views/auth_views/sign_in_view/sign-in-view.dart';
 import 'package:doit/app_views/auth_views/sign_up_view/sign-up-view.dart';
 import 'package:doit/app_views/home_view/home-view.dart';
@@ -6,7 +7,6 @@ import 'package:doit/app_views/starting_views/onboarding_view/onboarding_view.da
 import 'package:doit/app_views/starting_views/splash_view/splash-view.dart';
 import 'package:doit/app_views/task_view/detail_view.dart';
 import 'package:doit/app_views/task_view/task_view.dart';
-import 'package:doit/app_views/time_view/time_view.dart';
 import 'package:doit/common/bottom_bar/bottom_bar.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -15,6 +15,7 @@ import 'package:firebase_core/firebase_core.dart' show Firebase;
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'firebase_options.dart';
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/BottomBar', page: ()=>BottomBarExample()),
         GetPage(name: '/HomeView', page: ()=>HomeView()),
         GetPage(name: '/TaskPage', page: ()=>TaskPage()),
-        GetPage(name: '/TimeView', page: ()=>TimeView()),
+        GetPage(name: '/DateView', page: ()=>CustomCalendar()),
         GetPage(name: '/SettingView', page: ()=>SettingView()),
         GetPage(name: '/taskDetailView', page: ()=>Detailpage()),
       ],

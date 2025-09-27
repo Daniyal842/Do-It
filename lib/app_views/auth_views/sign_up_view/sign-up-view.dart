@@ -98,11 +98,20 @@ class _SignUpViewState extends State<SignUpView> {
                   borderRadius: BorderRadius.circular(10),
                   color: AppColors.white1,
                 ),
-                child: AppTextForm(
+                child:  Obx(() => AppTextForm(
                   hintText: "Password",
-                  prefixIcon: Icon(Icons.lock_outlined),
+                  prefixIcon: const Icon(Icons.lock_outlined),
                   controller: authController.passwordController,
-                ),
+                  obscureText: authController.obscure_signupPassword.value, // ✅ reactive hogaya
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      authController.toggle_signupPassword();
+                    },
+                    icon: authController.obscure_signupPassword.value
+                        ? Image.asset(AppImages.close_eye, width: 22, height: 22)
+                        : const Icon(Icons.remove_red_eye_outlined),
+                  ),
+                )),
               ),
               Obx(() => authController.isLoading.value
                   ? LoadingWidget()
@@ -127,13 +136,12 @@ class _SignUpViewState extends State<SignUpView> {
                           fontWeight: FontWeight.w500),
                     ),
                     NavTextButton(
-                        text: "Sign In",
-                        color: AppColors.blue4,
-                        onTap: (){
-                          // authController.nav_to_SignIn(context);
-                          Get.toNamed('SignInView');
-                        }
-                    )
+                          text: "Sign In",
+                          color: AppColors.blue4,
+                          onTap: (){
+                            authController.nav_to_SignIn(context);
+                          }
+                      ),
                   ],
                 ),
               ),

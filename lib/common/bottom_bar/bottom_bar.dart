@@ -1,3 +1,4 @@
+import 'package:doit/app_views/Calendar_view/Calendar_view.dart';
 import 'package:doit/common/bottom_bar/bottom_bar_controller.dart';
 import 'package:doit/common/constants/app-colors.dart';
 import 'package:doit/common/constants/app-icons.dart';
@@ -7,7 +8,6 @@ import 'package:get/get.dart';
 // Import tumhari screens
 import 'package:doit/app_views/home_view/home-view.dart';
 import 'package:doit/app_views/task_view/task_view.dart';
-import 'package:doit/app_views/time_view/time_view.dart';
 import 'package:doit/app_views/setting_view/setting_view.dart';
 
 class BottomBarExample extends StatelessWidget {
@@ -27,7 +27,7 @@ class BottomBarExample extends StatelessWidget {
     final pages = [
        HomeView(),
        TaskPage(),
-       TimeView(),
+       CustomCalendar(),
        SettingView(),
     ];
 

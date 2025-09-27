@@ -5,4 +5,5 @@ class AppImages{
   static String onbording2='lib/assets/onbording2.png';
   static String onbording3='lib/assets/onbording3.png';
   static String onbording4='lib/assets/onbording4.png';
+  static String close_eye='lib/assets/close-eye.png';
 }

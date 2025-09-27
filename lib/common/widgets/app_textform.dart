@@ -11,6 +11,7 @@ class AppTextForm extends StatelessWidget {
   // ✅ New optional params
   final Widget? prefixIcon;
   final Widget? suffixIcon;
+  final bool obscureText;
   final Color? iconColor;
   final double borderRadius;
   final Color fillColor;
@@ -33,6 +34,7 @@ class AppTextForm extends StatelessWidget {
     this.hintColor = Colors.grey,
     this.textColor=Colors.black,
     this.cursorColor = AppColors.black1,
+    this.obscureText=false,
     this.contentPadding =
     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
   });
@@ -44,6 +46,7 @@ class AppTextForm extends StatelessWidget {
       keyboardType: keyboardType,
       maxLines: maxLines,
       cursorColor: cursorColor,
+      obscureText: obscureText,
       style:  TextStyle(color: textColor),
       decoration: InputDecoration(
         hintText: hintText,

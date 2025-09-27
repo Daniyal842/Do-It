@@ -4,7 +4,6 @@ import 'package:doit/common/widgets/app_text.dart';
 import 'package:doit/common/widgets/app_textform.dart';
 import 'package:doit/common/widgets/container_button_two.dart';
 import 'package:doit/common/widgets/gradient_background.dart';
-import 'package:doit/common/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -17,7 +16,7 @@ class Detailpage extends StatelessWidget {
     final task = Get.arguments as Map<String, dynamic>;
     TasklistController tasklistController = Get.put(TasklistController());
     return Scaffold(
-        body: Obx( ()=>tasklistController.isLoading.value?LoadingWidget(): GradientBackground(
+        body: GradientBackground(
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
@@ -144,10 +143,10 @@ class Detailpage extends StatelessWidget {
                 ],
               ),
             ),
-          ),
         ));
   }
 }
+
 
 void showUpdateTaskSheet(BuildContext context, Map<String, dynamic> task) {
   TasklistController tasklistController = Get.find();

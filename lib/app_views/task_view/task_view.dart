@@ -27,7 +27,7 @@ class _TaskPageState extends State<TaskPage> {
     TasklistController tasklistController = Get.put(TasklistController());
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(), // 👈 ensures perfect circle
+        shape: const CircleBorder(),
         backgroundColor: Colors.blue,
         onPressed: () {
           showModalBottomSheet(
@@ -39,7 +39,7 @@ class _TaskPageState extends State<TaskPage> {
             ),
             builder: (context) {
               return FractionallySizedBox(
-                heightFactor: 0.7, // 👈 exactly half screen
+                heightFactor: 0.7,
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -80,8 +80,11 @@ class _TaskPageState extends State<TaskPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(
-                              width: 120,
+                              width: 150,
                               child: TextFormField(
+                                style: GoogleFonts.poppins(
+                                    color: AppColors.white1
+                                ),
                                 cursorColor: AppColors.blue4,
                                 controller: tasklistController.dateController,
                                 readOnly: true,
@@ -115,8 +118,11 @@ class _TaskPageState extends State<TaskPage> {
                                 ),
                               )),
                           Container(
-                            width: 120,
+                            width: 150,
                             child: TextFormField(
+                              style: GoogleFonts.poppins(
+                                color: AppColors.white1
+                              ),
                               cursorColor: AppColors.blue4,
                               controller: tasklistController.timeController,
                               readOnly: true,

@@ -163,6 +163,10 @@ class TasklistController extends GetxController {
     }
   }
   void cancelTask() {
+    taskController.clear();
+    descriptionController.clear();
+    dateController.clear();
+    timeController.clear();
       Get.back();
   }
 
@@ -253,6 +257,4 @@ class TasklistController extends GetxController {
       isLoading.value = false;
     }
   }
-
-
 }
