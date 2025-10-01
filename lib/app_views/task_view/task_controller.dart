@@ -1,260 +1,490 @@
-import 'package:doit/app_views/home_view/profile_controller.dart';
-import 'package:doit/common/constants/app-colors.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'task_model_class.dart';
+// import '../home_view/profile_controller.dart';
+//
+// class TasklistController extends GetxController {
+//   final TextEditingController taskController = TextEditingController();
+//   final TextEditingController descriptionController = TextEditingController();
+//   final TextEditingController dateController = TextEditingController();
+//   final TextEditingController timeController = TextEditingController();
+//
+//   final ProfileController profileController = Get.put(ProfileController());
+//
+//   var isLoading = false.obs;
+//   var selectedIndex = 0.obs;
+//
+//   RxString selectedSort="All".obs;
+//   RxString searchQuery = "".obs;
+//   RxList<TaskModel> taskList = <TaskModel>[].obs;
+//
+//   // final List<String> sortOptions = [
+//   //   "All Task",
+//   //   "Pending",
+//   //   "Completed",
+//   // ];
+//
+//   void changeIndex(int index) {
+//     selectedIndex.value = index;
+//     fetchTasks();
+//   }
+//
+//   /// Pick Date
+//   Future<void> pickDate(BuildContext context) async {
+//     DateTime? pickedDate = await showDatePicker(
+//       context: context,
+//       initialDate: DateTime.now(),
+//       firstDate: DateTime(2000),
+//       lastDate: DateTime(2101),
+//     );
+//     if (pickedDate != null) {
+//       dateController.text = "${pickedDate.toLocal()}".split(' ')[0];
+//     }
+//   }
+//
+//   /// Pick Time
+//   Future<void> pickTime(BuildContext context) async {
+//     TimeOfDay? pickedTime =
+//     await showTimePicker(context: context, initialTime: TimeOfDay.now());
+//     if (pickedTime != null) {
+//       timeController.text =
+//       "${pickedTime.hour}:${pickedTime.minute.toString().padLeft(2, '0')}";
+//     }
+//   }
+//
+//   /// Create Task
+//   Future<void> createTask() async {
+//     isLoading.value=true;
+//     if (profileController.userId.isEmpty) return;
+//
+//     if (taskController.text.trim().isEmpty ||
+//         descriptionController.text.trim().isEmpty ||
+//         dateController.text.trim().isEmpty ||
+//         timeController.text.trim().isEmpty) {
+//       Get.snackbar("Error", "All fields are required!");
+//       isLoading.value=false;
+//       return;
+//     }
+//
+//     try {
+//       final docRef = FirebaseFirestore.instance
+//           .collection("userData")
+//           .doc(profileController.userId.value)
+//           .collection("tasks")
+//           .doc();
+//
+//       final newTask = TaskModel(
+//         id: docRef.id,
+//         title: taskController.text.trim(),
+//         description: descriptionController.text.trim(),
+//         date: dateController.text.trim(),
+//         time: timeController.text.trim(),
+//         status: "pending",
+//       );
+//
+//       await docRef.set(newTask.toMap());
+//       taskList.add(newTask);
+//
+//       clearFields();
+//       Get.snackbar("Success", "Task created");
+//       isLoading.value=false;
+//     } catch (e) {
+//       Get.snackbar("Error", e.toString());
+//       isLoading.value=false;
+//     }
+//   }
+//   /// Fetch Tasks
+//   Future<void> fetchTasks() async {
+//     if (profileController.userId.isEmpty) return;
+//
+//     taskList.clear();
+//     try {
+//       final snapshot = await FirebaseFirestore.instance
+//           .collection("userData")
+//           .doc(profileController.userId.value)
+//           .collection("tasks")
+//           .get();
+//
+//       for (var doc in snapshot.docs) {
+//         final data = doc.data();
+//
+//         taskList.add(TaskModel(
+//           id: doc.id,
+//           title: data["task"] ?? "",
+//           description: data["description"] ?? "",
+//           date: data["date"] ?? "",
+//           time: data["time"] ?? "",
+//           status: data["status"] ?? "pending",
+//         ));
+//       }
+//
+//       taskList.refresh(); // UI refresh
+//     } catch (e) {
+//       Get.snackbar("Error", e.toString());
+//     }
+//   }
+//
+//
+//
+// // ✅ Delete by ID
+//   Future<void> deleteTask(String id) async {
+//     try {
+//       await FirebaseFirestore.instance
+//           .collection("userData")
+//           .doc(profileController.userId.value)
+//           .collection("tasks")
+//           .doc(id)
+//           .delete();
+//
+//       fetchTasks(); // refresh
+//       // Get.back(); // close detail page or dialog
+//       Get.toNamed('/BottomBar');
+//       Get.snackbar("Success", "Task deleted");
+//     } catch (e) {
+//       Get.snackbar("Error", e.toString());
+//     }
+//   }
+//
+// //✅ Update by ID
+//   Future<void> updateTaskById(String id, Map<String, dynamic> data) async {
+//     try {
+//       await FirebaseFirestore.instance
+//           .collection("userData")
+//           .doc(profileController.userId.value)
+//           .collection("tasks")
+//           .doc(id)
+//           .update(data);
+//
+//       fetchTasks(); // refresh
+//       Get.back(); // close bottom sheet
+//       Get.snackbar("Success", "Task updated");
+//     } catch (e) {
+//       Get.snackbar("Error", e.toString());
+//     }
+//   }
+//
+//   //
+//   //
+//   // //
+//   // // ✅ Getter for filtered tasks
+//   // // ✅ Getter for filtered tasks
+//   // List<TaskModel> get filteredTasks {
+//   //   if (selectedIndex.value == 1) {
+//   //     return taskList.where((t) => t.status == "pending").toList();
+//   //   } else if (selectedIndex.value == 2) {
+//   //     return taskList.where((t) => t.status == "complete").toList();
+//   //   }
+//   //   return taskList; // all
+//   // }
+//   //
+//   // Future<void> updateTaskStatus(String taskId) async {
+//   //   try {
+//   //     final taskIndex = taskList.indexWhere((task) => task.id == taskId);
+//   //     if (taskIndex == -1) return;
+//   //
+//   //     final currentTask = taskList[taskIndex];
+//   //     final newStatus = currentTask.status == "pending" ? "complete" : "pending";
+//   //
+//   //     await FirebaseFirestore.instance
+//   //         .collection("userData")
+//   //         .doc(profileController.userId.value)
+//   //         .collection("tasks")
+//   //         .doc(taskId)
+//   //         .update({"status": newStatus});
+//   //
+//   //     // ✅ Replace with new model (to trigger UI refresh)
+//   //     taskList[taskIndex] = TaskModel(
+//   //       id: currentTask.id,
+//   //       title: currentTask.title,
+//   //       description: currentTask.description,
+//   //       date: currentTask.date,
+//   //       time: currentTask.time,
+//   //       status: newStatus,
+//   //     );
+//   //     taskList.refresh();
+//   //
+//   //     Get.snackbar("Success", "Task marked as $newStatus");
+//   //   } catch (e) {
+//   //     Get.snackbar("Error", e.toString());
+//   //   }
+//   // }
+//
+//   changeSort(String value){
+//
+//     selectedSort.value =value;
+//   }
+//   List<TaskModel> get filteredTask {
+//     var task= taskList.toList();
+//     if(searchQuery.value.isNotEmpty)
+//       {
+//         task=task.where((t)=>t.title.toLowerCase().contains(searchQuery.value.toLowerCase())).toList();
+//       }
+//     if(selectedSort.value=="Complete")
+//       {
+//         task=task.where((t)=>t.status=="Complete").toList();
+//       }
+//     else if(selectedSort.value=="Pending")
+//       {
+//         task=task.where((t)=>t.status=="Pending").toList();
+//       }
+//     return task;
+//   }
+//
+//
+//
+//   void clearFields() {
+//     taskController.clear();
+//     descriptionController.clear();
+//     dateCon
+//     timeController.clear();
+//     Get.back();
+//   }
+//
+//   @override
+//   void onInit() {
+//     super.onInit();
+//     fetchTasks();
+//   }
+// }
+
+
+
+
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doit/app_views/task_view/task_model_class.dart';
+import 'package:doit/common/widgets/show-message.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class TasklistController extends GetxController {
-  // Controllers
-  final TextEditingController taskController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController dateController = TextEditingController();
-  final TextEditingController timeController = TextEditingController();
+class TaskListController extends GetxController{
+  TextEditingController titleController =TextEditingController();
+  TextEditingController descriptionController=TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
 
-  // 👇 ProfileController instance
-  final ProfileController profileController = Get.put(ProfileController());
+  var userId = "".obs;
+  var userEmail = "".obs;
 
-  var selectedIndex = 0.obs;
+  Rx<DateTime?> selectedDate = Rx<DateTime?>(null);
+  Rx<TimeOfDay?> selectedTime = Rx<TimeOfDay?>(null);
 
-  final List<String> sortOptions = [
-    "All Task",
-    "Pendding",
-    "Completed",
-  ];
+  RxList<TaskModel> taskList = <TaskModel>[].obs;
 
-  void changeIndex(int index) {
-    selectedIndex.value = index;
+  RxString searchQuery = "".obs;
+  RxString selectedSort = "All".obs;
+  RxBool isLoading = false.obs;
+
+  void onInit() {
+    super.onInit();
+    getUserInfo(); // userId fetch karenge
   }
 
-  var isLoading = false.obs;
+  // ✅ Get User Info and Fetch Tasks
+  getUserInfo() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      userId.value = user.uid;
+      userEmail.value = user.email ?? "";
 
-  nav_to_detail(Map<String, dynamic> task) {
-    Get.toNamed('/taskDetailView', arguments: task);
+      // userId milne ke baad hi fetchTasks call karein
+      fetchTasks();
+    }
   }
 
-  // nav_to_detail(){
-  //   Get.toNamed('/taskDetailView');
-  // }
-  nav_to_task(){
-    Get.toNamed('/BottomBar');
-  }
-  // 🔹 Date Picker
-  Future<void> pickDate(BuildContext context) async {
-    DateTime? pickedDate = await showDatePicker(
+
+  pickDate(BuildContext context) async {
+    selectedDate.value = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Color(0xFF2196F3),
-              onPrimary: Colors.white,
-              surface: Color(0xFF0D1B2A),
-              onSurface: Colors.white,
-            ),
-            dialogBackgroundColor: Color(0xCC0D1B2A),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(foregroundColor: AppColors.blue4),
-            ),
-          ),
-          child: child!,
-        );
-      },
+      lastDate: DateTime(2100),
     );
-
-    if (pickedDate != null) {
-      dateController.text =
-      "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
-    }
   }
 
-  // 🔹 Time Picker
-  Future<void> pickTime(BuildContext context) async {
-    TimeOfDay? pickedTime = await showTimePicker(
+  pickTime(BuildContext context) async {
+    selectedTime.value = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
-      builder: (context, child) {
-        return Theme(
-          data: ThemeData.dark().copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: Color(0xFF2196F3),
-              onPrimary: Colors.white,
-              surface: Color(0xFF0D1B2A),
-              onSurface: Colors.white,
-              secondary: Color(0xFF2196F3),
-              onSecondary: Colors.white,
-            ),
-            dialogBackgroundColor: Color(0xCC0D1B2A),
-          ),
-          child: child!,
-        );
-      },
     );
-
-    if (pickedTime != null) {
-      final formattedTime = pickedTime.format(context); // 👈 ye AM/PM ke sath show karega
-      timeController.text = formattedTime;
-    }
-
   }
 
-  // 🔹 Create Task
-  void createTask() async {
-    String task = taskController.text.trim();
-    String description = descriptionController.text.trim();
-    String date = dateController.text.trim();
-    String time = timeController.text.trim();
 
-    if (task.isEmpty || description.isEmpty || date.isEmpty || time.isEmpty) {
-      Get.snackbar(
-        "Error",
-        "Please fill all fields before creating task",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+  insertTask() async {
+    if (titleController.text.isEmpty ||
+        descriptionController.text.isEmpty ||
+        selectedDate.value == null ||
+        selectedTime.value == null) {
+     ShowMessage.errorMessage("Error", "All fields are required!");
       return;
     }
 
+
+    isLoading.value = true;
     try {
-      isLoading.value = true;
-
-      String docId = FirebaseFirestore.instance
-          .collection('userData')
-          .doc(profileController.userId.value) // ✅ ProfileController ka UID
-          .collection('tasks')
-          .doc()
-          .id;
-
-      await FirebaseFirestore.instance
-          .collection('userData')
-          .doc(profileController.userId.value) // ✅
-          .collection('tasks')
-          .doc(docId)
-          .set({
-        'docId': docId,
-        'task': task,
-        'description': description,
-        'date': date,
-        'time': time,
-        'status': 'pending',
-        'createdAt': FieldValue.serverTimestamp(),
+      final docRef = await FirebaseFirestore.instance.collection("UserData").add({
+        "title": titleController.text,
+        "description": descriptionController.text,
+        "date": selectedDate.value!.toIso8601String(),
+        "time": "${selectedTime.value!.hour}:${selectedTime.value!.minute}",
+        "userId": userId.value,
+        "status": "Pending",
       });
 
-      taskController.clear();
-      descriptionController.clear();
-      dateController.clear();
-      timeController.clear();
+      taskList.add(TaskModel(
+        id: docRef.id,
+        title: titleController.text,
+        description: descriptionController.text,
+        date: selectedDate.value!,
+        time: selectedTime.value!,
+        status: "Pending",
+      ));
 
+      clearFields();
+      ShowMessage.successMessage("Success", "Task added successfully");
       Get.back();
-      Get.snackbar("Success", "Task Created Successfully",
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.green,
-          colorText: Colors.white);
     } catch (e) {
-      Get.snackbar("Error", "Failed to create task: $e",
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      ShowMessage.errorMessage("Error", e.toString());
     } finally {
       isLoading.value = false;
     }
   }
-  void cancelTask() {
-    taskController.clear();
+
+  fetchTasks() async {
+    if (userId.value.isEmpty) return;
+
+    taskList.clear();
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection("UserData")
+          .where("userId", isEqualTo: userId.value)
+          .get();
+
+      // for each loop
+      for (var doc in snapshot.docs) {
+        final data = doc.data();
+        final timeParts = (data["time"] as String).split(":");
+        taskList.add(TaskModel(
+          id: doc.id,
+          title: data["title"] ?? "",
+          description: data["description"] ?? "",
+          date: DateTime.parse(data["date"]),
+          time: TimeOfDay(
+            hour: int.parse(timeParts[0]),
+            minute: int.parse(timeParts[1]),
+          ),
+          status: data["status"] ?? "Pending",
+        ));
+      }
+    } catch (e) {
+    ShowMessage.errorMessage("Error", e.toString());
+    }
+  }
+
+  deleteTask(String id) async {
+    try {
+      await FirebaseFirestore.instance.collection("UserData").doc(id).delete();
+      taskList.removeWhere((task) => task.id == id);
+     ShowMessage.successMessage("Deleted", "Task deleted successfully");
+    } catch (e) {
+      ShowMessage.errorMessage("Error", e.toString());
+    }
+  }
+
+  updateTask(TaskModel task) async {
+    if (titleController.text.isEmpty ||
+        descriptionController.text.isEmpty ||
+        selectedDate.value == null ||
+        selectedTime.value == null) {
+      ShowMessage.errorMessage("Error", "All fields are required!");
+      return;
+    }
+
+    isLoading.value = true;
+    try {
+      await FirebaseFirestore.instance.collection("UserData").doc(task.id).update({
+        "title": titleController.text,
+        "description": descriptionController.text,
+        "date": selectedDate.value!.toIso8601String(),
+        "time": "${selectedTime.value!.hour}:${selectedTime.value!.minute}",
+      });
+
+      int index = taskList.indexWhere((t) => t.id == task.id);
+      if (index != -1) {
+        taskList[index] = TaskModel(
+          id: task.id,
+          title: titleController.text,
+          description: descriptionController.text,
+          date: selectedDate.value!,
+          time: selectedTime.value!,
+          status: task.status,
+        );
+      }
+
+      clearFields();
+     ShowMessage.successMessage("Updated", "Task updated successfully");
+    } catch (e) {
+      ShowMessage.errorMessage("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  changeStatus(TaskModel task, String newStatus) async {
+    try {
+      await FirebaseFirestore.instance.collection("UserData").doc(task.id).update({
+        "status": newStatus,
+      });
+
+      int index = taskList.indexWhere((t) => t.id == task.id);
+      if (index != -1) {
+        taskList[index].status = newStatus;
+        taskList.refresh();
+      }
+    } catch (e) {
+      ShowMessage.errorMessage("Error", e.toString());
+    }
+  }
+
+  changeSort(String value) {
+    selectedSort.value = value;
+  }
+
+  List<TaskModel> get filteredTasks {
+    var tasks = taskList.toList();
+
+    if (searchQuery.value.isNotEmpty) {
+      tasks = tasks.where((t) => t.title.toLowerCase().contains(searchQuery.value.toLowerCase())).toList();
+    }
+
+    if (selectedSort.value == "Complete") {
+      tasks = tasks.where((t) => t.status == "Complete").toList();
+    } else if (selectedSort.value == "Incomplete") {
+      tasks = tasks.where((t) => t.status == "Pending").toList();
+    }
+
+    return tasks;
+  }
+
+  void clearFields() {
+    titleController.clear();
     descriptionController.clear();
-    dateController.clear();
-    timeController.clear();
-      Get.back();
+    selectedDate.value = null;
+    selectedTime.value = null;
   }
 
-// 🔹 Update Task
-  Future<void> updateTask(String docId) async {
-    String task = taskController.text.trim();
-    String description = descriptionController.text.trim();
-    String date = dateController.text.trim();
-    String time = timeController.text.trim();
-
-    if (task.isEmpty || description.isEmpty || date.isEmpty || time.isEmpty) {
-      Get.snackbar(
-        "Error",
-        "Please fill all fields before updating task",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      return;
-    }
-
+  void logout() async {
     try {
-      isLoading.value = true;
-
-      await FirebaseFirestore.instance
-          .collection('userData')
-          .doc(profileController.userId.value)
-          .collection('tasks')
-          .doc(docId) // ✅ pass the existing docId
-          .update({
-        'task': task,
-        'description': description,
-        'date': date,
-        'time': time,
-        'updatedAt': FieldValue.serverTimestamp(),
-      });
-
-      taskController.clear();
-      descriptionController.clear();
-      dateController.clear();
-      timeController.clear();
-
-      Get.back();
-      Get.snackbar("Success", "Task Updated Successfully",
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.green,
-          colorText: Colors.white);
+      await FirebaseAuth.instance.signOut();
+      if (Get.isRegistered<TaskListController>()) {
+        Get.delete<TaskListController>(force: true);
+      }
+      Get.offAllNamed('/login');
     } catch (e) {
-      Get.snackbar("Error", "Failed to update task: $e",
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
-    } finally {
-      isLoading.value = false;
+      ShowMessage.errorMessage("Error", e.toString());
     }
   }
 
-//  🔹 Delet Task
-  Future<void> deleteTask(String docId) async {
-    try {
-      isLoading.value = true;
-
-      await FirebaseFirestore.instance
-          .collection('userData')
-          .doc(profileController.userId.value)
-          .collection('tasks')
-          .doc(docId)
-          .delete();
-
-      Get.back(); // close detail page or sheet
-      Get.toNamed('BottomBar');
-      Get.snackbar(
-        "Deleted",
-        "Task deleted successfully",
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Failed to delete task: $e",
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    } finally {
-      isLoading.value = false;
-    }
-  }
 }

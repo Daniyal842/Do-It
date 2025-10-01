@@ -19,7 +19,7 @@ class AuthController extends GetxController {
   toggle_signinPassword(){
     obscure_signinPassword.value=!obscure_signinPassword.value;
   }
-  
+
   toggle_signupPassword(){
     obscure_signupPassword.value=!obscure_signupPassword.value;
   }

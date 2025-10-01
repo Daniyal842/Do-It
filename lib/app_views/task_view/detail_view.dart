@@ -1,4 +1,5 @@
 import 'package:doit/app_views/task_view/task_controller.dart';
+import 'package:doit/app_views/task_view/task_model_class.dart';
 import 'package:doit/common/constants/app-colors.dart';
 import 'package:doit/common/widgets/app_text.dart';
 import 'package:doit/common/widgets/app_textform.dart';
@@ -9,153 +10,137 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 class Detailpage extends StatelessWidget {
-  const Detailpage({super.key});
+
+  const Detailpage({super.key, });
 
   @override
   Widget build(BuildContext context) {
-    final task = Get.arguments as Map<String, dynamic>;
-    TasklistController tasklistController = Get.put(TasklistController());
+     TaskListController tasklistController = Get.put(TaskListController());
+     final task = Get.arguments as TaskModel;
+
     return Scaffold(
-        body: GradientBackground(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-              ),
-              child: Column(
+      body: GradientBackground(
+        child:
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 40,
-                        ),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.arrow_back_ios_new,
-                          ),
-                          iconSize: 30,
-                          color: AppColors.blue4,
-                          onPressed: () {
-                            tasklistController.nav_to_task();
-                          },
-                        ),
-                      ),
-                      AppText(
-                        text: "Task Details",
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ],
-                  ),
-                  ListTile(
-                    title: SizedBox(
-                      height: 30,
-                      child: SingleChildScrollView(
-                        child: AppText(
-                          text: task['task'],
-                          fontSize: 20,
-                          maxLines: 5000,
-                        ),
-                      ),
-                    ),
-                    subtitle: Row(
-                      children: [
-                        Icon(
-                          Icons.calendar_month_outlined,
-                          color: AppColors.white1,
-                        ),
-                        AppText(
-                          text: task['date'],
-                          fontSize: 14,
-                          fontWeight: FontWeight.w300,
-                        ),
-                        AppText(
-                          text: " | ",
-                          //fontSize: 14,
-                          fontWeight: FontWeight.w300,
-                        ),
-                        Icon(
-                          Icons.access_time_outlined,
-                          color: AppColors.white1,
-                        ),
-                        AppText(
-                          text: task['time'],
-                          fontSize: 14,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    color: AppColors.white1,
-                    thickness: 0.5,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    child: SingleChildScrollView(
-                      child: AppText(
-                        text: task['description'],
-                        fontSize: 14,
-                        maxLines: 5000,
-                      ),
-                    ),
-                  ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ContainerButtonTwo(
-                          icon: Icons.check_circle,
-                          iconColor: AppColors.green1,
-                          text: "Done",
-                          onTap: () {},
-                        ),
-                        ContainerButtonTwo(
-                          icon: Icons.delete_forever_outlined,
-                          iconColor: AppColors.red1,
-                          text: "Delete",
-                          onTap: () {
-                            Get.defaultDialog(
-                              title: "Delete Task",
-                              middleText: "Are you sure you want to delete this task?",
-                              textCancel: "Cancel",
-                              textConfirm: "Delete",
-                              confirmTextColor: Colors.white,
-                              buttonColor: AppColors.red1,
-                              onConfirm: () {
-                                tasklistController.deleteTask(task['docId']); // 👈 pass docId
-                              },
-                            );
-                          },
-                        ),
-                        ContainerButtonTwo(
-                          icon: Icons.update,
-                          iconColor: AppColors.yellow1,
-                          text: "Update",
-                          onTap: () {
-                            showUpdateTaskSheet(context, task);
-                          },
-                        ),
-                      ],
+                    padding: const EdgeInsets.symmetric(vertical: 40),
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back_ios_new),
+                      iconSize: 30,
+                      color: AppColors.blue4,
+                      onPressed: () {
+                        Get.back();
+                      },
                     ),
-                  )
+                  ),
+                  AppText(
+                    text: "Task Details",
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ],
               ),
-            ),
-        ));
+              ListTile(
+                title: AppText(
+                  text: task.title,
+                  fontSize: 20,
+                  maxLines: 5,
+                ),
+                subtitle: Row(
+                  children: [
+                    const Icon(Icons.calendar_month_outlined, color: Colors.white),
+                    AppText(
+                      text: task.date.toString(),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
+                    ),
+                    AppText(
+                      text: " | ",
+                      fontWeight: FontWeight.w300,
+                    ),
+                    const Icon(Icons.access_time_outlined, color: Colors.white),
+                    AppText(
+                      text: task.time.toString(),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(color: Colors.white, thickness: 0.5),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: AppText(
+                    text: task.description,
+                    fontSize: 14,
+                    maxLines: 5000,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ContainerButtonTwo(
+                      icon: Icons.check_circle,
+                      iconColor: AppColors.green1,
+                      text: "Done",
+                      onTap: () {
+                        tasklistController.updateTask(task);
+                      },
+                    ),
+                    ContainerButtonTwo(
+                      icon: Icons.delete_forever_outlined,
+                      iconColor: AppColors.red1,
+                      text: "Delete",
+                      onTap: () {
+                        Get.defaultDialog(
+                          title: "Delete Task",
+                          middleText: "Are you sure you want to delete this task?",
+                          textCancel: "Cancel",
+                          textConfirm: "Delete",
+                          confirmTextColor: Colors.white,
+                          buttonColor: AppColors.red1,
+                          onConfirm: () {
+                            tasklistController.deleteTask(task.id); // 👈 docId pass
+                          },
+                        );
+                      },
+                    ),
+                    ContainerButtonTwo(
+                      icon: Icons.update,
+                      iconColor: AppColors.yellow1,
+                      text: "Update",
+                      onTap: () {
+                        showUpdateTaskSheet(context, task); // 👈 TaskModel pass
+                      },
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
-
-void showUpdateTaskSheet(BuildContext context, Map<String, dynamic> task) {
-  TasklistController tasklistController = Get.find();
+//👇 Update sheet ab TaskModel ke sath compatible
+void showUpdateTaskSheet(BuildContext context, TaskModel task) {
+  TaskListController taskListController = Get.find();
 
   // prefill fields
-  tasklistController.taskController.text = task['task'];
-  tasklistController.descriptionController.text = task['description'];
-  tasklistController.dateController.text = task['date'];
-  tasklistController.timeController.text = task['time'];
+  taskListController.titleController.text = task.title;
+  taskListController.descriptionController.text = task.description;
+  taskListController.dateController.text = task.date.toString();
+  taskListController.timeController.text = task.time.toString();
 
   showModalBottomSheet(
     context: context,
@@ -185,14 +170,14 @@ void showUpdateTaskSheet(BuildContext context, Map<String, dynamic> task) {
               ),
               AppTextForm(
                 hintText: "Task",
-                controller: tasklistController.taskController,
+                controller: taskListController.titleController,
                 fillColor: AppColors.blue2,
                 textColor: AppColors.white1,
                 cursorColor: AppColors.blue4,
               ),
               AppTextForm(
                 hintText: "Description",
-                controller: tasklistController.descriptionController,
+                controller: taskListController.descriptionController,
                 maxLines: 6,
                 fillColor: AppColors.blue2,
                 textColor: AppColors.white1,
@@ -204,9 +189,9 @@ void showUpdateTaskSheet(BuildContext context, Map<String, dynamic> task) {
                   SizedBox(
                     width: 120,
                     child: TextFormField(
-                      controller: tasklistController.dateController,
+                      controller: taskListController.dateController,
                       readOnly: true,
-                      onTap: () => tasklistController.pickDate(context),
+                      onTap: () => taskListController.pickDate(context),
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.date_range_outlined),
                         hintText: "Date",
@@ -216,9 +201,9 @@ void showUpdateTaskSheet(BuildContext context, Map<String, dynamic> task) {
                   SizedBox(
                     width: 120,
                     child: TextFormField(
-                      controller: tasklistController.timeController,
+                      controller: taskListController.timeController,
                       readOnly: true,
-                      onTap: () => tasklistController.pickTime(context),
+                      onTap: () => taskListController.pickTime(context),
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.access_time),
                         hintText: "Time",
@@ -238,17 +223,30 @@ void showUpdateTaskSheet(BuildContext context, Map<String, dynamic> task) {
                       Get.back();
                     },
                   ),
-                  Obx(() => tasklistController.isLoading.value
+                  Obx(() => taskListController.isLoading.value
                       ? const CircularProgressIndicator()
                       : ContainerButtonTwo(
-                          icon: Icons.update,
-                          iconColor: AppColors.yellow1,
-                          text: "Update",
-                          onTap: () {
-                            tasklistController
-                                .updateTask(task['docId']); // 👈 pass id
-                          },
-                        )),
+                    icon: Icons.update,
+                    iconColor: AppColors.yellow1,
+                    text: "Update",
+                    onTap: () {
+                      // 1️⃣ ID nikaalo task se
+                      final String id = task.id;
+
+                      // 2️⃣ Data map banao textfield se updated values ke sath
+                      final Map<String, dynamic> data = {
+                        "title": taskListController.titleController.text.trim(),
+                        "description": taskListController.descriptionController.text.trim(),
+                        "date": taskListController.dateController.text.trim(),
+                        "time": taskListController.timeController.text.trim(),
+                      };
+
+                      // 3️⃣ Update function call karo
+                      taskListController.updateTask(task);
+
+
+                    },
+                  )),
                 ],
               ),
             ],
@@ -258,3 +256,4 @@ void showUpdateTaskSheet(BuildContext context, Map<String, dynamic> task) {
     },
   );
 }
+

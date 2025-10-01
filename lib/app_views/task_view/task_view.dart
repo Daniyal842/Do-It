@@ -14,17 +14,12 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class TaskPage extends StatefulWidget {
+class TaskPage extends StatelessWidget {
   const TaskPage({super.key});
 
   @override
-  State<TaskPage> createState() => _TaskPageState();
-}
-
-class _TaskPageState extends State<TaskPage> {
-  @override
   Widget build(BuildContext context) {
-    TasklistController tasklistController = Get.put(TasklistController());
+    TaskListController tasklistController = Get.put(TaskListController());
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
@@ -58,7 +53,7 @@ class _TaskPageState extends State<TaskPage> {
                       ),
                       AppTextForm(
                         hintText: "task",
-                        controller: tasklistController.taskController,
+                        controller: tasklistController.titleController,
                         prefixIcon: Image.asset(
                           AppIcons.box_chekmark,
                           color: AppColors.grey2,
@@ -83,8 +78,7 @@ class _TaskPageState extends State<TaskPage> {
                               width: 150,
                               child: TextFormField(
                                 style: GoogleFonts.poppins(
-                                    color: AppColors.white1
-                                ),
+                                    color: AppColors.white1),
                                 cursorColor: AppColors.blue4,
                                 controller: tasklistController.dateController,
                                 readOnly: true,
@@ -120,9 +114,8 @@ class _TaskPageState extends State<TaskPage> {
                           Container(
                             width: 150,
                             child: TextFormField(
-                              style: GoogleFonts.poppins(
-                                color: AppColors.white1
-                              ),
+                              style:
+                                  GoogleFonts.poppins(color: AppColors.white1),
                               cursorColor: AppColors.blue4,
                               controller: tasklistController.timeController,
                               readOnly: true,
@@ -162,7 +155,7 @@ class _TaskPageState extends State<TaskPage> {
                         children: [
                           ContainerButton(
                             onTap: () {
-                              tasklistController.cancelTask();
+                              tasklistController.clearFields();
                             },
                             text: "Cancel",
                             bgColor: AppColors.grey1,
@@ -175,7 +168,7 @@ class _TaskPageState extends State<TaskPage> {
                                 ? LoadingWidget()
                                 : ContainerButton(
                                     onTap: () {
-                                      tasklistController.createTask();
+                                      tasklistController.insertTask();
                                     },
                                     text: "Create",
                                     bgColor: AppColors.blue3,
@@ -196,185 +189,131 @@ class _TaskPageState extends State<TaskPage> {
         child: const Icon(Icons.add,
             color: Colors.white), // 👈 circular button icon
       ),
-      body: GradientBackground(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // SizedBox(height: 70,),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 40,
+      body:GradientBackground(
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 40),
+          child: Container(
+            width: 300,
+            height: 50,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: AppColors.blue2,
+            ),
+            child: TextField(
+              style: TextStyle(color: AppColors.white1, fontSize: 14),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: "Search by task title",
+                hintStyle: TextStyle(color: Colors.white70),
+                prefixIcon: Icon(Icons.search, color: Colors.grey),
               ),
-              child: Container(
-                width: 300,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: AppColors.blue2,
-                ),
-                child: AppTextForm(
-                  hintText: "search by task title",
-                  hintColor: AppColors.grey2,
+              onChanged: (value) {
+                tasklistController.searchQuery.value = value;
+              },
+            ),
+          ),
+        ),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: AppText(
+                  text: 'Task List',
+                  fontSize: 18,
+                  color: AppColors.white1,
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 10), // left & right space
-                  child: AppText(
-                      text: 'Task List', fontSize: 18, color: AppColors.white1),
-                ),
-                Container(
-                  width: 120,
-                  height: 45,
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 7), // left & right space
-
+            Expanded(
+              child: Obx(
+                    () => Container(
+                      width: 10,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
                     color: AppColors.blue2,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Obx(
-                    () => DropdownButtonHideUnderline(
-                      child: DropdownButton<int>(
-                        value: tasklistController.selectedIndex
-                            .value, //controller.selectedIndex.value,
-                        dropdownColor: AppColors.blue2,
-                        icon:
-                            Icon(Icons.arrow_drop_down, color: AppColors.grey2),
-                        isExpanded: true,
-                        items: List.generate(
-                          tasklistController.sortOptions.length,
-                          // controller.sortOptions.length,
-                          (index) => DropdownMenuItem(
-                            value: index,
-                            child: Text(
-                              tasklistController.sortOptions[index],
-                              style:
-                                  GoogleFonts.poppins(color: AppColors.white1),
-                            ),
-                          ),
-                        ),
-                        onChanged: (value) {
-                          if (value != null) {
-                            tasklistController.changeIndex(value);
-                          }
-                        },
-                      ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      value: tasklistController.selectedSort.value,
+                      dropdownColor: AppColors.blue2,
+                      icon: const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
+                      style: TextStyle(color: AppColors.white1, fontSize: 14),
+                      onChanged: (value) {
+                        if (value != null) tasklistController.changeSort(value);
+                      },
+                      items: const [
+                        DropdownMenuItem(value: "All", child: Text("All")),
+                        DropdownMenuItem(value: "Complete", child: Text("Complete")),
+                        DropdownMenuItem(value: "Incomplete", child: Text("Incomplete")),
+                      ],
                     ),
                   ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 30,
-            ),
-
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('userData')
-                    .doc(FirebaseAuth.instance.currentUser!.uid)
-                    .collection('tasks')
-                    .orderBy('createdAt', descending: true)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  var tasks = snapshot.data!.docs;
-
-                  // filter karne ke liye Obx
-                  return Obx(() {
-                    if (tasklistController.selectedIndex.value == 1) {
-                      tasks =
-                          tasks.where((t) => t['status'] == 'pending').toList();
-                    } else if (tasklistController.selectedIndex.value == 2) {
-                      tasks = tasks
-                          .where((t) => t['status'] == 'completed')
-                          .toList();
-                    }
-
-                    if (tasks.isEmpty) {
-                      return const Center(child: Text("No tasks found"));
-                    }
-
-                    return ListView.builder(
-                      itemCount: tasks.length,
-                      itemBuilder: (context, index) {
-                        var task = tasks[index];
-                        return Card(
-                          color: AppColors.white1,
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 6),
-                          child: ListTile(
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: AppText(
-                                    text: task['task'],
-                                    color: AppColors.black1,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    //is jega per text 1 line per pora nahi ata
-                                    maxLines: 1,
-                                    overflow:
-                                        TextOverflow.ellipsis, // ... ajayega
-                                  ),
-                                ),
-                                AppText(
-                                  text: task['status'] == 'pending'
-                                      ? "Pending"
-                                      : "Completed",
-                                  color: task['status'] == 'pending'
-                                      ? Colors.red
-                                      : Colors.green,
-                                  fontSize: 15,
-                                ),
-                              ],
-                            ),
-                            subtitle: Row(
-                              children: [
-                                AppText(
-                                  text: "${task['date']} | ",
-                                  color: AppColors.black1,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12,
-                                ),
-                                AppText(
-                                  text: task['time'],
-                                  color: AppColors.black1,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12,
-                                ),
-                              ],
-                            ),
-                            trailing: IconButton(
-                              icon: Icon(Icons.arrow_forward_ios_rounded),
-                              iconSize: 30,
-                              color: Colors.green,
-                              onPressed: () {
-                                tasklistController.nav_to_detail(
-                                    task.data() as Map<String, dynamic>);
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  });
-                },
+                ),
               ),
             ),
           ],
         ),
-      ),
+
+        const SizedBox(height: 30),  // ✅ ab sahi jagah
+
+        Expanded(
+          child: Obx(() {
+            final task = tasklistController.filteredTasks;
+            if (tasklistController.isLoading.value) {
+              return const Center(child: LoadingWidget());
+            }
+            if (task.isEmpty) {
+              return const Center(child: Text("No tasks found"));
+            }
+            return ListView.builder(
+              itemCount: task.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  color: AppColors.white1,
+                  child: ListTile(
+                    onTap: () {
+                      Get.toNamed(
+                        '/taskDetailView',
+                       arguments: task[index]
+                       // arguments: task[index],
+                      );
+                    },
+                    title: AppText(
+                      text: task[index].title.toString(),
+                      color: AppColors.black1,
+                      fontSize: 16,
+                    ),
+                    subtitle: AppText(
+                      text:
+                      "${task[index].date.toString()} | ${task[index].time.toString()}",
+                      color: AppColors.black1,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    trailing: AppText(
+                      text: task[index].status.toString(),
+                      color: AppColors.red2,
+                      fontSize: 14,
+                    ),
+                  ),
+                );
+              },
+            );
+          }),
+        ),
+      ],
+    ),
+    ),
+
     );
   }
 }

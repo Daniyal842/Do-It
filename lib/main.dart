@@ -6,6 +6,7 @@ import 'package:doit/app_views/setting_view/setting_view.dart';
 import 'package:doit/app_views/starting_views/onboarding_view/onboarding_view.dart';
 import 'package:doit/app_views/starting_views/splash_view/splash-view.dart';
 import 'package:doit/app_views/task_view/detail_view.dart';
+import 'package:doit/app_views/task_view/task_model_class.dart';
 import 'package:doit/app_views/task_view/task_view.dart';
 import 'package:doit/common/bottom_bar/bottom_bar.dart';
 
